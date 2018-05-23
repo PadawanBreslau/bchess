@@ -1,5 +1,6 @@
 require "bchess/version"
+require "pgn/parser"
+
 
 module Bchess
-  # Your code goes here...
 end

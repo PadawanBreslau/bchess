@@ -1,0 +1,127 @@
+grammar Sexp
+  rule all_games
+    ( game )* <PAllGames>
+  end
+
+  rule game
+    header_body new_line all_moves? new_line? result? multiple_line? <PGame>
+  end
+
+## HEADER PART
+
+  rule header_body
+    (header)* <PHeaderBody>
+  end
+
+  rule header
+    "[" identifier space string "]" new_line <PHeader>
+  end
+
+## BODY PART
+
+  rule all_moves
+    ( move / comment_with_brackets / variation / castle / special_sign )* <PAllMovesWithResult>
+  end
+
+  rule move
+    ( move_number? piecechar? chessline? takes? chesscolumn takes? chesscolumn? chessline promotion? check?) space? <PMove>
+  end
+
+  rule variation
+    "(" space? all_moves space? ")" space? <PVariation>
+  end
+
+  rule move_number
+    ( integer ( '...' / '.' ) space? ) <PMoveNumber>
+  end
+
+
+  rule comment_with_brackets
+    "{" comment "}" space?  <PCommentWithBracket>
+  end
+
+  rule comment
+    space? new_line? float? time? ( identifier space? )* <PComment>
+  end
+
+  rule time
+    "[" time_identifier "]" <PTime>
+  end
+
+  rule time_identifier
+    "%clk" space [0-9]+ ":" [0-9]* ":" [0-9]* <PTimeIdentifier>
+  end
+
+  rule move_with_number
+    integer ( '...' / '.' ) space? move <PMoveWithNumber>
+  end
+
+  rule takes
+   [x] / "ax" / "bx" / "cx" / "dx" / "ex" / "fx" / "gx" / "hx" <PTakes>
+  end
+
+
+  rule result
+    "1-0" / "0-1" / "1/2-1/2" / "1/2" / "*" <PResult>
+  end
+
+## DATATYPES
+
+  rule integer
+    ('+' / '-')? [0-9]+ <PInteger>
+  end
+
+  rule float
+    ('+' / '-')? [0-9]+ (('.' [0-9]+) / ('e' [0-9]+)) <PFloat>
+  end
+
+  rule string
+    '"' ([^"\\] / "\\" . )* '"' <PString>
+  end
+
+  rule identifier
+    [a-zA-Z0-9\=\*\+\-\%\'\"\`\;\/\$\!\?\,\:\(\)\.\<\>] [a-zA-Z0-9_\=\*\+\-\%\'\"\`\;\/\$\!\?\,\:\(\)\.\<\>]* <PIdentifier>
+  end
+
+  rule space
+    [\s]+
+  end
+
+  rule new_line
+    [\n]
+  end
+
+  rule multiple_line
+    (new_line)*
+  end
+
+## CHESS RULES
+
+  rule chesscolumn
+    [a-h]
+  end
+
+  rule chessline
+    [1-8]
+  end
+
+  rule piecechar
+    [A-Z]
+  end
+
+  rule check
+    "+" / "#"
+  end
+
+  rule castle
+    move_number? ( "O-O-O" / "O-O" ) check? space? <PCastle>
+  end
+
+  rule promotion
+    "="? [A-Z]
+  end
+
+  rule special_sign
+    "$" integer space?
+  end
+end
