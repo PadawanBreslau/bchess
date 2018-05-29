@@ -12,6 +12,10 @@ module Bchess
       name + field(column, row)
     end
 
+    def moved
+      false
+    end
+
     def name
       raise Exception.new("Should be defined in subclass")
     end

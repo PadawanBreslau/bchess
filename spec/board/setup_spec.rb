@@ -4,6 +4,7 @@ RSpec.describe Bchess::Board do
   context 'setting up position' do
     it 'should create empty board' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       expect(board.pieces).to be_empty
       expect(board.fen).to eq Bchess::START_FEN
       expect(board.valid_position?).not_to be
@@ -11,6 +12,7 @@ RSpec.describe Bchess::Board do
 
     it 'empty board with two kings should be valid' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       board.pieces << Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << Bchess::King.new(Bchess::BLACK, 7, 7)
 
@@ -19,6 +21,7 @@ RSpec.describe Bchess::Board do
 
     it 'empty board with two kings should not be valid when kings near' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       board.pieces << Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << Bchess::King.new(Bchess::BLACK, 2, 2)
 
@@ -27,6 +30,7 @@ RSpec.describe Bchess::Board do
 
     it 'should disallow posiition with kind attacked' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       board.pieces << Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << Bchess::King.new(Bchess::BLACK, 7, 7)
       board.pieces << Bchess::Rook.new(Bchess::WHITE, 7, 1)
@@ -36,6 +40,7 @@ RSpec.describe Bchess::Board do
 
     it 'should allow posiition with kind attack blocked' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       board.pieces << Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << Bchess::King.new(Bchess::BLACK, 7, 7)
       board.pieces << Bchess::Rook.new(Bchess::WHITE, 7, 1)

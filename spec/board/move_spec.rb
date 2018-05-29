@@ -4,6 +4,7 @@ RSpec.describe Bchess::Board do
   context 'basic moves' do
     it 'should move a king' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
       king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
@@ -17,6 +18,7 @@ RSpec.describe Bchess::Board do
 
     it 'should move a queen' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
       king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
@@ -32,6 +34,7 @@ RSpec.describe Bchess::Board do
 
     it 'should move a rook' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
       king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
@@ -47,6 +50,7 @@ RSpec.describe Bchess::Board do
 
     it 'should move a bishop' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
       king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
@@ -62,6 +66,7 @@ RSpec.describe Bchess::Board do
 
     it 'should be able to take a piece' do
       board = Bchess::Board.new
+      board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
       king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)

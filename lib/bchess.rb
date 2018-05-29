@@ -7,6 +7,8 @@ require "bchess/queen"
 require "bchess/knight"
 require "bchess/pawn"
 require "bchess/board"
+require "bchess/helpers/board_helpers"
+require "bchess/helpers/fen_helpers"
 require "pgn/parser"
 
 
