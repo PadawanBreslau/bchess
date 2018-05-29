@@ -8,6 +8,27 @@ module Bchess
       @row = row
     end
 
+    def to_s
+      name + field(column, row)
+    end
+
+    def name
+      raise Exception.new("Should be defined in subclass")
+    end
+
+    def field(column, row)
+      (column+97).chr + (row+1).to_s
+    end
+
+    def at?(dcolumn, drow)
+      column == dcolumn && row == drow
+    end
+
+    def move(dcolumn, drow)
+      @column = dcolumn
+      @row = drow
+    end
+
     def can_move_to_field?(dcolumn, drow)
       !(column == dcolumn && drow == row) &&
       (0..7).include?(dcolumn) && (0..7).include?(drow)

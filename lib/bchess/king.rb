@@ -5,6 +5,10 @@ module Bchess
       super(args)
     end
 
+    def name
+      'K'
+    end
+
     def can_move_to_field?(dcolumn, drow)
       super &&
         (

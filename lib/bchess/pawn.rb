@@ -5,6 +5,10 @@ module Bchess
       super(args)
     end
 
+    def name
+      ''
+    end
+
     def valid?
       super && pawn_position?
     end
