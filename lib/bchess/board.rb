@@ -43,12 +43,22 @@ module Bchess
       change_move_number if piece.color == Bchess::BLACK
       remove_old_piece(column, row, piece.color) if !!at(column, row)
       validate_move
+    rescue RuntimeError
+      false
     end
 
     def castle(piece, column, row)
       validate_castle(piece, column)
       update_castles_after_king_move(piece.color)
       execute_castle(piece, column, row)
+    end
+
+    def execute_promotion(piece, column, row, promoted_piece)
+      raise RuntimeError.new("Promotion Not Specified") if promoted_piece.nil? || !(promoted_piece < Bchess::Piece)
+      pieces.delete(piece)
+      promoted = promoted_piece.new(piece.color, column, row)
+      promoted.moved = true if promoted_piece == Bchess::Rook
+      pieces << promoted
     end
 
     def update_castles_after_move(piece)

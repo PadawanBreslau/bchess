@@ -1,7 +1,7 @@
 module Bchess
   class Rook < Piece
 
-    attr_reader :moved
+    attr_accessor :moved
 
     def initiialize(*args)
       super(args)
