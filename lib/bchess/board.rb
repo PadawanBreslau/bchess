@@ -20,7 +20,7 @@ module Bchess
 
     def move(piece, column, row, promoted_piece = nil)
       return false if invalid_data?(piece, column, row)
-      @en_passant = '-'
+      @en_passant = '-' unless en_passant_detected?(piece, column, row)
       if castle_detected?(piece, column)
         castle(piece, column, row)
       elsif promotion_detected?(piece, row)
@@ -59,6 +59,20 @@ module Bchess
       promoted = promoted_piece.new(piece.color, column, row)
       promoted.moved = true if promoted_piece == Bchess::Rook
       pieces << promoted
+    end
+
+    def execute_en_passant(piece, row, column)
+      piece.move(row, column)
+      remove_old_piece(*remove_en_passant(piece, *transform_field(@en_passant)), piece.color)
+    end
+
+    def remove_en_passant(piece, column, row)
+      direction = piece.color == Bchess::WHITE ? 1 : -1
+      [column, row - direction]
+    end
+
+    def transform_field(field)
+      [field.chars.first.ord - 97, field.chars.last.to_i - 1]
     end
 
     def update_castles_after_move(piece)
@@ -101,6 +115,10 @@ module Bchess
 
     def validate_castle(piece, column)
       !piece.moved && !rook_moved?(piece, column) && fen_allows?(piece,column)
+    end
+
+    def validate_en_passant(piece, column, row)
+      true
     end
 
     def fen_allows?(piece, column)

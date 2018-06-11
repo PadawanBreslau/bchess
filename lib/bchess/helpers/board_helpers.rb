@@ -17,7 +17,7 @@ module Bchess
     end
 
     def en_passant_detected?(piece, column, row)
-      piece.kind_of?(Bchess::Pawn) && piece.row != row && piece.column != piece.column && at(column, row).nil?
+      piece.kind_of?(Bchess::Pawn) && piece.row != row && piece.column != column && at(column, row).nil? && piece.can_take_on_field?(column, row)
     end
 
     def pawn_long_move_detected?(piece, row)

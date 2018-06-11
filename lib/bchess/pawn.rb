@@ -20,7 +20,7 @@ module Bchess
 
     def can_take_on_field?(dcolumn, drow)
       direction = white? ? 1 : -1
-      by_diagonal(drow, dcolumn, 1) && (drow - row) == direction
+      by_diagonal(dcolumn, drow, 1) && (drow - row) == direction
     end
 
     def fields_between
