@@ -1,10 +1,12 @@
 require_relative 'helpers/board_helpers'
+require_relative 'helpers/castle_helpers'
 require_relative 'helpers/fen_helpers'
 
 module Bchess
   class Board
     include BoardHelpers
     include FenHelpers
+    include CastleHelpers
 
     attr_accessor :fen, :to_move, :pieces, :castles, :en_passant, :halfmove_clock, :move_number
 
@@ -28,23 +30,31 @@ module Bchess
       elsif en_passant_detected?(piece, column, row)
         validate_en_passant(piece, column, row) && execute_en_passant(piece, column, row)
       elsif pawn_long_move_detected?(piece, row)
-        piece.move(column, row)
-        direction = piece.color == Bchess::WHITE ? 1 : -1
-        @en_passant = field(column, (row + piece.row)/2 - direction)
+        long_pawn_move(piece, column, row)
       elsif piece.can_move_to_field?(column,row)
         piece.move(column, row)
       else
         return false
       end
 
+      update_info(piece, column, row)
+      validate_move
+    rescue RuntimeError
+      false
+    end
+
+    def long_pawn_move(piece, column, row)
+      piece.move(column, row)
+      direction = piece.color == Bchess::WHITE ? 1 : -1
+      @en_passant = field(column, (row + piece.row)/2 - direction)
+    end
+
+    def update_info(piece, column, row)
       update_castles_after_move(piece) if piece.moved
       change_halfmove_clock(piece)
       change_to_move
       change_move_number if piece.color == Bchess::BLACK
       remove_old_piece(column, row, piece.color) if !!at(column, row)
-      validate_move
-    rescue RuntimeError
-      false
     end
 
     def castle(piece, column, row)
@@ -113,10 +123,6 @@ module Bchess
       end
     end
 
-    def validate_castle(piece, column)
-      !piece.moved && !rook_moved?(piece, column) && fen_allows?(piece,column)
-    end
-
     def validate_en_passant(piece, column, row)
       true
     end
@@ -135,31 +141,6 @@ module Bchess
           castles.chars.include?('Q')
         end
       end
-    end
-
-    def rook_moved?(piece, column)
-      @castling_rook = if piece.row == 0
-        if column == 6
-          @short_castle = true
-          at(7,0)
-        else
-          at(0,0)
-        end
-      else
-        if column == 6
-          @short_castle = true
-          at(7,7)
-        else
-          at(0,7)
-        end
-      end
-      @castling_rook&.moved
-    end
-
-    def execute_castle(piece, column, row)
-      piece.move(column, row)
-      lngth = @short_castle ? 2 : 3
-      @castling_rook.move((@castling_rook.column - lngth).abs, row)
     end
 
     def valid_position?

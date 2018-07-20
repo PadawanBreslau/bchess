@@ -11,7 +11,6 @@ require "bchess/helpers/board_helpers"
 require "bchess/helpers/fen_helpers"
 require "pgn/parser"
 
-
 module Bchess
   WHITE = 'w'
   BLACK = 'b'
