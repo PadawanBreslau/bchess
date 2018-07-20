@@ -1,12 +1,16 @@
 require_relative 'helpers/board_helpers'
 require_relative 'helpers/castle_helpers'
+require_relative 'helpers/en_passant_helpers'
 require_relative 'helpers/fen_helpers'
+require_relative 'helpers/validations'
 
 module Bchess
   class Board
     include BoardHelpers
     include FenHelpers
     include CastleHelpers
+    include EnPassantHelpers
+    include Validations
 
     attr_accessor :fen, :to_move, :pieces, :castles, :en_passant, :halfmove_clock, :move_number
 
@@ -43,12 +47,6 @@ module Bchess
       false
     end
 
-    def long_pawn_move(piece, column, row)
-      piece.move(column, row)
-      direction = piece.color == Bchess::WHITE ? 1 : -1
-      @en_passant = field(column, (row + piece.row)/2 - direction)
-    end
-
     def update_info(piece, column, row)
       update_castles_after_move(piece) if piece.moved
       change_halfmove_clock(piece)
@@ -57,11 +55,6 @@ module Bchess
       remove_old_piece(column, row, piece.color) if !!at(column, row)
     end
 
-    def castle(piece, column, row)
-      validate_castle(piece, column)
-      update_castles_after_king_move(piece.color)
-      execute_castle(piece, column, row)
-    end
 
     def execute_promotion(piece, column, row, promoted_piece)
       raise RuntimeError.new("Promotion Not Specified") if promoted_piece.nil? || !(promoted_piece < Bchess::Piece)
@@ -71,81 +64,8 @@ module Bchess
       pieces << promoted
     end
 
-    def execute_en_passant(piece, row, column)
-      piece.move(row, column)
-      remove_old_piece(*remove_en_passant(piece, *transform_field(@en_passant)), piece.color)
-    end
-
-    def remove_en_passant(piece, column, row)
-      direction = piece.color == Bchess::WHITE ? 1 : -1
-      [column, row - direction]
-    end
-
     def transform_field(field)
       [field.chars.first.ord - 97, field.chars.last.to_i - 1]
-    end
-
-    def update_castles_after_move(piece)
-      if piece == Bchess::King
-        update_castles_after_king_move(piece.color)
-      elsif piece == Bchess::Rook
-        update_castles_after_rook_move(piece)
-      end
-    end
-
-    def update_castles_after_king_move(color)
-      if color == Bchess::WHITE
-        @castles.gsub!('K', '').gsub!('Q', '')
-      else
-        @castles.gsub!('k', '').gsub!('q', '')
-      end
-    end
-
-    def change_move_number
-      @move_number = move_number + 1
-    end
-
-    def change_halfmove_clock(piece)
-      if piece.kind_of?(Bchess::Pawn)
-        @halfmove_clock = 0
-      else
-        @halfmove_clock = halfmove_clock + 1
-      end
-    end
-
-    def validate_move
-      if !valid_position?
-        read_fen
-        false
-      else
-        @fen = update_fen
-        true
-      end
-    end
-
-    def validate_en_passant(piece, column, row)
-      true
-    end
-
-    def fen_allows?(piece, column)
-      if piece.color == Bchess::WHITE
-        if column == 6
-          castles.chars.include?('k')
-        else
-          castles.chars.include?('q')
-        end
-      else
-        if column == 6
-          castles.chars.include?('K')
-        else
-          castles.chars.include?('Q')
-        end
-      end
-    end
-
-    def valid_position?
-      kings_present? &&
-        !king_attacked(just_moved)
     end
 
     def at(column, row)
@@ -186,25 +106,6 @@ module Bchess
       end
     end
 
-    def set_to_move(fen_colors)
-      @to_move = fen_colors == 'w' ? Bchess::WHITE : Bchess::BLACK
-    end
-
-    def set_castles(fen_castles)
-      @castles = fen_castles
-    end
-
-    def set_en_passant(fen_en_passant)
-      @en_passant = fen_en_passant
-    end
-
-    def set_halfmove_clock(fen_halfmove_clock)
-      @halfmove_clock = fen_halfmove_clock.to_i
-    end
-
-    def set_move_number(fen_move_number)
-      @move_number = fen_move_number.to_i
-    end
 
     def remove_old_piece(column, row, color)
       taken_piece = _other_pieces(color).select{|p| p.row == row && p.column == column}.first

@@ -1,4 +1,10 @@
 module CastleHelpers
+  def castle(piece, column, row)
+    validate_castle(piece, column)
+    update_castles_after_king_move(piece.color)
+    execute_castle(piece, column, row)
+  end
+
   def validate_castle(piece, column)
     !piece.moved && !rook_moved?(piece, column) && fen_allows?(piece,column)
   end

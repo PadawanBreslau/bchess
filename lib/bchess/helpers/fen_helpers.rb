@@ -50,8 +50,72 @@ module Bchess
       line
     end
 
+    def fen_allows?(piece, column)
+      if piece.color == Bchess::WHITE
+        if column == 6
+          castles.chars.include?('k')
+        else
+          castles.chars.include?('q')
+        end
+      else
+        if column == 6
+          castles.chars.include?('K')
+        else
+          castles.chars.include?('Q')
+        end
+      end
+    end
+
     def to_fen(piece)
       fen_hash.key({ :klass => piece.class, :color => piece.color }).to_s
+    end
+
+    def change_halfmove_clock(piece)
+      if piece.kind_of?(Bchess::Pawn)
+        @halfmove_clock = 0
+      else
+        @halfmove_clock = halfmove_clock + 1
+      end
+    end
+
+    def update_castles_after_move(piece)
+      if piece == Bchess::King
+        update_castles_after_king_move(piece.color)
+      elsif piece == Bchess::Rook
+        update_castles_after_rook_move(piece)
+      end
+    end
+
+    def update_castles_after_king_move(color)
+      if color == Bchess::WHITE
+        @castles.gsub!('K', '').gsub!('Q', '')
+      else
+        @castles.gsub!('k', '').gsub!('q', '')
+      end
+    end
+
+    def change_move_number
+      @move_number = move_number + 1
+    end
+
+    def set_to_move(fen_colors)
+      @to_move = fen_colors == 'w' ? Bchess::WHITE : Bchess::BLACK
+    end
+
+    def set_castles(fen_castles)
+      @castles = fen_castles
+    end
+
+    def set_en_passant(fen_en_passant)
+      @en_passant = fen_en_passant
+    end
+
+    def set_halfmove_clock(fen_halfmove_clock)
+      @halfmove_clock = fen_halfmove_clock.to_i
+    end
+
+    def set_move_number(fen_move_number)
+      @move_number = fen_move_number.to_i
     end
 
     def additional_info
