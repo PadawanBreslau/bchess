@@ -12,5 +12,13 @@ RSpec.describe Bchess::PGN::Parser do
       expect{parser.parse}.to raise_error(Bchess::PGN::ParserException)
     end
   end
+
+  context 'raeding a file' do
+    it 'should parse a file with single game' do
+      file = Bchess::PGN::PGNFile.new('./spec/pgn/examples/StanislawZawadzkiOne.pgn')
+      parser = Bchess::PGN::Parser.new(file)
+      parser.parse
+    end
+  end
 end
 

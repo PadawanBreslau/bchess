@@ -10,6 +10,7 @@ require "bchess/board"
 require "bchess/helpers/board_helpers"
 require "bchess/helpers/fen_helpers"
 require "pgn/parser"
+require "pgn/pgn_file"
 
 module Bchess
   WHITE = 'w'

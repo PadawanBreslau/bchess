@@ -1,26 +1,28 @@
-require 'byzantion_chess'
+module Bchess
+  module PGN
+    class PGNFile
+      attr_accessor :filepath, :games, :content
 
-class PgnFile
-  attr_accessor :filepath, :games
+      def initialize(filepath)
+        @filepath = filepath
+      end
 
-  def initialize(filepath)
-  	raise ByzantionChess::InvalidPGNFile.new("Not a pgn extension") unless filepath[-3..-1] == 'pgn'  # TODO Fole.extname
-    @filepath = filepath
-  end
+      def load_games
+        file = File.open(filepath, "rt")
+        @content = file.read
+      end
 
-  def load_and_parse_games
-    raise ByzantionChess::InvalidPGNFile.new("PgnFileNotFound") unless File.exists?(filepath)
-    file = File.open(filepath, "rt")
-    content = file.read
-    raise ByzantionChess::InvalidPGNFile.new("PgnFileEmpty") if content.blank?
-    pgn_content = PgnFileContent.new(content)
-    begin
-      @games = pgn_content.parse_games
-    rescue ByzantionChess::InvalidPGNFile => e
-      return false
-    ensure
-      file.close
+      def parse_games
+        pgn_content = Bchess::PGN::FileContent.new(content)
+        begin
+          @games = pgn_content.parse_games
+        rescue BChess::InvalidPGNFile
+          return false
+        ensure
+          file.close
+        end
+        true
+      end
     end
-    true
   end
 end

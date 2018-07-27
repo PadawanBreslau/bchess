@@ -16,11 +16,17 @@ module Bchess
       end
 
       def parse
-        @tree = @@parser.parse(input)
+        if input.kind_of?(String)
+          @tree = @@parser.parse(input)
+        elsif input.kind_of?(Bchess::PGN::PGNFile)
+          @tree = @@parser.parse(input.load_games)
+        end
+
         if !tree
           puts @@parser.failure_reason
           raise PGN::ParserException, "Parse error at offset: #{@@parser.index}"
         end
+
         clean_tree(tree)
         read_games(tree)
       end
@@ -52,7 +58,7 @@ module Bchess
 
       def get_header_information(header_root)
         root_elements = header_root.elements
-        return unless root_elements.present?
+        return if root_elements.nil?
         header_hash = Hash.new
         root_elements.each do |header_line|
           parsed_header_line = header_line.selfparse(header_line.text_value)
