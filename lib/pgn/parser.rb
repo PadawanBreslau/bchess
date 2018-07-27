@@ -2,25 +2,24 @@ require 'rubygems'
 require 'treetop'
 require_relative 'pgn_nodes.rb'
 
-
 module Bchess
   module PGN
+    class ParserException < Exception ;end
     class Parser
       Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'pgn_rules.treetop')))
       @@parser = SexpParser.new
 
-      attr_reader :input, :output, :error
+      attr_reader :input, :output, :error, :tree
 
       def initialize(input)
         @input = input
       end
 
       def parse
-        puts 'AAAA'
-        tree = @@parser.parse(input)
+        @tree = @@parser.parse(input)
         if !tree
           puts @@parser.failure_reason
-          raise Exception, "Parse error at offset: #{@@parser.index}"
+          raise PGN::ParserException, "Parse error at offset: #{@@parser.index}"
         end
         clean_tree(tree)
         read_games(tree)
@@ -29,21 +28,21 @@ module Bchess
       private
 
       ## cleans tree, leaving only nodes from our classess
-      def self.clean_tree(root_node)
+      def clean_tree(root_node)
         root_elements = root_node.elements
         return unless root_elements
         root_elements.delete_if{|node| node.class.name == "Treetop::Runtime::SyntaxNode" }
         root_elements.each {|node| clean_tree(node) }
       end
 
-      def self.read_games(root_node)
+      def read_games(root_node)
         root_elements = root_node.elements
         return unless root_elements
         root_elements.each{|game| parse_one_game(game) }
       end
 
 
-      def self.parse_one_game(game_root)
+      def parse_one_game(game_root)
         root_elements = game_root.elements
         return unless root_elements
         header, body = root_elements
@@ -51,7 +50,7 @@ module Bchess
         get_game_body(body, header_id) if body.class == Sexp::PAllMovesWithResult
       end
 
-      def self.get_header_information(header_root)
+      def get_header_information(header_root)
         root_elements = header_root.elements
         return unless root_elements.present?
         header_hash = Hash.new
@@ -62,7 +61,7 @@ module Bchess
         header_hash
       end
 
-      def self.get_game_body(body_root, header_id)
+      def get_game_body(body_root, header_id)
         root_elements = body_root.elements
         return if root_elements.nil? || body_root.text_value == ""
         body_id = 0
@@ -81,7 +80,7 @@ module Bchess
         end
       end
 
-      def self.wrong_format(header_value)
+      def wrong_format(header_value)
         header_value.empty? || header_value == "?" || header_value == "0"
       end
     end
