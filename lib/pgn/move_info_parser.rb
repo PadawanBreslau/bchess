@@ -1,5 +1,3 @@
-require 'byzantion_chess'
-
 class MoveInfoParser
   attr_accessor :info, :move, :castle
 
@@ -19,7 +17,7 @@ class MoveInfoParser
 
   def basic_move_data(move_split, move_string)
     Hash.new.tap do |info|
-      info[:piece_color] = move_split.size == 2 ? ByzantionChess::WHITE : ByzantionChess::BLACK
+      info[:piece_color] = move_split.size == 2 ? Bchess::WHITE : Bchess::BLACK
       info[:move_number] = move_split.first.strip if move_split.size == 2
       raise InvalidMoveException.new("Wrong move description") if move_string.size < 2
       info[:check] = move_string.include?('+')
@@ -42,26 +40,26 @@ class MoveInfoParser
   def additional_info(move_string)
     Hash.new.tap do |info|
       if(2 == move_string.size)
-        info[:piece_type] = ByzantionChess::Pawn
-        info[:field] = ByzantionChess::Field.to_field(move_string)
+        info[:piece_type] = Bchess::Pawn
+        info[:field] = Bchess::Field.to_field(move_string)
       elsif(3 == move_string.size)
         if move_string[0].ord >= 'a'.ord && move_string[0].ord <= 'h'.ord  # "cxd4"
           info[:additional_info] = move_string[0]
-          info[:piece_type] = ByzantionChess::Pawn
+          info[:piece_type] = Bchess::Pawn
         else
           info[:piece_type] = get_piece_from_letter(move_string[0])
         end
-        info[:field] = ByzantionChess::Field.to_field(move_string[1..2])
+        info[:field] = Bchess::Field.to_field(move_string[1..2])
       elsif(4 == move_string.size)
         info[:piece_type] = get_piece_from_letter(move_string[0])
-        info[:field] = ByzantionChess::Field.to_field(move_string[2..3])
+        info[:field] = Bchess::Field.to_field(move_string[2..3])
         info[:additional_info] = move_string[1]
       end
     end
   end
 
   def get_piece_from_letter(letter)
-    {"K" => ByzantionChess::King, "Q" => ByzantionChess::Queen, "R" => ByzantionChess::Rook,
-     "B" => ByzantionChess::Bishop, "N" => ByzantionChess::Knight}[letter]
+    {"K" => Bchess::King, "Q" => Bchess::Queen, "R" => Bchess::Rook,
+     "B" => Bchess::Bishop, "N" => Bchess::Knight}[letter]
   end
 end

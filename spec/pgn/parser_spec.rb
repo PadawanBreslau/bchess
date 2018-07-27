@@ -17,7 +17,10 @@ RSpec.describe Bchess::PGN::Parser do
     it 'should parse a file with single game' do
       file = Bchess::PGN::PGNFile.new('./spec/pgn/examples/StanislawZawadzkiOne.pgn')
       parser = Bchess::PGN::Parser.new(file)
-      parser.parse
+      parsed_games = parser.parse
+      game = parsed_games.first
+
+      expect(game).to be_kind_of Sexp::PGame
     end
   end
 end

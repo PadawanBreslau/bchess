@@ -9,7 +9,7 @@ module Sexp
   end
 
   class PHeader < Treetop::Runtime::SyntaxNode
-    def selfparse value
+    def selfparse(value)
       val = value.split(" ",2)
       return [val[0].delete('['), val[1].delete('"]').rstrip]
     end
@@ -45,7 +45,7 @@ module Sexp
       elsif !move_hash[:white] && move_part.include?("O-O-O")
         move_part.gsub!("O-O-O", "Kec8")
       elsif !move_hash[:white] && move_part.include?("O-O")
-        move_part.gsub!("O-O", "Keg9")
+        move_part.gsub!("O-O", "Keg8")
       end
 
       move_hash[:is_check] = move_part.end_with?("+")
@@ -124,7 +124,6 @@ class Treetop::Runtime::SyntaxNode
     hash = {}
     self.elements.each do |element|
       hash[element.elements.first.text_value] = element.elements.last.text_value.gsub('"','')
-# TODO - to hash values or recursive
     end
     hash
   end
