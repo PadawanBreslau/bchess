@@ -17,6 +17,8 @@ require "pgn/game_body"
 require "pgn/move_info_parser"
 
 module Bchess
+  class InvalidMoveException < StandardError; end
+
   WHITE = 'w'
   BLACK = 'b'
   START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'

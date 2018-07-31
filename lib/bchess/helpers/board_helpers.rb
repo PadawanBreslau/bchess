@@ -13,7 +13,7 @@ module Bchess
     end
 
     def promotion_detected?(piece, row)
-      piece.kind_of?(Bchess::Pawn) && row == 0 || row == 7
+      piece.kind_of?(Bchess::Pawn) && (row == 0 || row == 7)
     end
 
     def en_passant_detected?(piece, column, row)
@@ -26,6 +26,18 @@ module Bchess
 
     def kings_present?
       !!king(Bchess::WHITE) && !!king(Bchess::BLACK)
+    end
+
+    def to_row(row)
+      row.to_i - 1
+    end
+
+    def to_column(column)
+      column.bytes.first - 97
+    end
+
+    def field(column, row)
+      (column+97).chr + (row+1).to_s
     end
   end
 end

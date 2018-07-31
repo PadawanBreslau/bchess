@@ -23,10 +23,6 @@ module Bchess
       by_diagonal(dcolumn, drow, 1) && (drow - row) == direction
     end
 
-    def fields_between
-      []
-    end
-
     private
 
     def pawn_move(dcolumn, drow)

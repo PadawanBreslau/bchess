@@ -14,7 +14,7 @@ module Bchess
         by_jump(dcolumn, drow)
     end
 
-    def fields_between
+    def fields_between(column, row)
       []
     end
 

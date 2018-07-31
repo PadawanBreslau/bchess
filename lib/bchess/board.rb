@@ -37,6 +37,8 @@ module Bchess
         long_pawn_move(piece, column, row)
       elsif piece.can_move_to_field?(column,row)
         piece.move(column, row)
+      elsif piece.can_take_on_field?(column,row)
+        piece.move(column, row)
       else
         return false
       end
@@ -45,6 +47,10 @@ module Bchess
       validate_move
     rescue RuntimeError
       false
+    end
+
+    def get_possible_pieces(info)
+      @pieces.select{|p| p.can_move?(info, self)}
     end
 
     def update_info(piece, column, row)
@@ -89,6 +95,10 @@ module Bchess
       puts _pieces(Bchess::BLACK).map{|p| p.to_s }.join(', ')
     end
 
+    def king(color)
+      @pieces.select{ |p| p.class == Bchess::King && p.color == color }.first
+    end
+
     private
 
     def set_pieces(board)
@@ -106,7 +116,6 @@ module Bchess
       end
     end
 
-
     def remove_old_piece(column, row, color)
       taken_piece = _other_pieces(color).select{|p| p.row == row && p.column == column}.first
       pieces.delete(taken_piece)
@@ -120,9 +129,6 @@ module Bchess
       to_move == Bchess::WHITE ? Bchess::BLACK : Bchess::WHITE
     end
 
-    def king(color)
-      @pieces.select{ |p| p.class == Bchess::King && p.color == color }.first
-    end
 
     def king_attacked(color)
       _king = king(color)
@@ -133,7 +139,7 @@ module Bchess
 
     def attacks?(piece, king)
       piece.can_take_on_field?(king.column, king.row) &&
-        piece.fields_between(king.column, king.row).none?{|c,r| pieces.any?{|p| p.at?(c,r) }}
+        piece.fields_between(king.column, king.row).none?{|f| at(*f)}
     end
 
     def _pieces(color)

@@ -12,6 +12,7 @@ module CastleHelpers
   def execute_castle(piece, column, row)
     piece.move(column, row)
     lngth = @short_castle ? 2 : 3
+    @castling_rook = castling_rook(piece, column)
     @castling_rook.move((@castling_rook.column - lngth).abs, row)
   end
 
@@ -38,7 +39,7 @@ module CastleHelpers
   end
 
   def castling_rook(piece, column)
-    @castling_rook ||= select_rook(piece, column)
+    select_rook(piece, column)
   end
 
   def select_rook(piece, column)

@@ -44,8 +44,8 @@ RSpec.describe Bchess::Queen do
       expect(queen.fields_between(1,1)).to be_empty
       expect(queen.fields_between(2,2)).to be_empty
       expect(queen.fields_between(1,2)).to be_empty
-      expect(queen.fields_between(6,1)).to eq [[2, 1], [3, 1], [4, 1], [5, 1]]
-      expect(queen.fields_between(6,6)).to eq [[2, 2], [3, 3], [4, 4], [5, 5]]
+      expect(queen.fields_between(6,1).sort).to eq [[2, 1], [3, 1], [4, 1], [5, 1]].sort
+      expect(queen.fields_between(6,6).sort).to eq [[2, 2], [3, 3], [4, 4], [5, 5]].sort
     end
   end
 end
