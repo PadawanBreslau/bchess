@@ -21,6 +21,7 @@ module CastleHelpers
       @short_castle = true
       at(7,0)
     else
+      @short_castle = false
       at(0,0)
     end
   end
@@ -30,6 +31,7 @@ module CastleHelpers
       @short_castle = true
       at(7,7)
     else
+      @short_castle = false
       at(0,7)
     end
   end

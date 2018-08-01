@@ -1,4 +1,5 @@
 require_relative 'helpers/board_helpers'
+require_relative 'helpers/field_between_helpers'
 require_relative 'helpers/validations'
 
 module Bchess
@@ -6,7 +7,7 @@ module Bchess
     attr_reader :color, :column, :row
 
     include BoardHelpers
-    include Validations
+    include FieldBetweenHelpers
 
     def initialize(color, column, row)
       @color = color
@@ -35,7 +36,7 @@ module Bchess
       @row = drow
     end
 
-    def can_move?(info, board)
+    def can_make_move?(info, board)
       row = to_row(info[:row])
       column = to_column(info[:column])
 
@@ -47,17 +48,46 @@ module Bchess
     end
 
     def can_move_or_take?(column, row, board)
-      fields_between(column, row).none?{|f| board.at(*f)} &&
-      (can_move_to_field?(column, row) ||
-                         (can_take_on_field?(column, row) && !!board.at(column, row)) || can_en_passant_on_field?(column, row, board)
-      )
+      clear_path?(column, row, board) &&
+      (
+        can_move?(column, row) ||
+        can_take?(column, row, board) ||
+        can_en_passant?(column, row, board)
+      ) && valid_position_after?(column, row, board)
     end
 
-    def can_en_passant_on_field?(column, row, board)
+    def clear_path?(column, row, board)
+      fields_between(column, row).none?{|f| board.at(*f)}
+    end
+
+    def can_move?(column, row)
+      can_move_to_field?(column, row)
+    end
+
+    def can_take?(column, row, board)
+      can_take_on_field?(column, row) && !!board.at(column, row)
+    end
+
+    def can_en_passant?(column, row, board)
       board.en_passant == field(column, row)
     end
 
     def valid_position_after?(dcolumn, drow, board)
+      old_col = column
+      old_row = row
+
+      move(dcolumn, drow)
+      board.change_to_move
+
+      if board.valid_position?
+        board.change_to_move
+        move(old_col, old_row)
+        true
+      else
+        board.change_to_move
+        move(old_col, old_row)
+        false
+      end
     end
 
     def additional_info?(info)
@@ -71,47 +101,6 @@ module Bchess
 
     def can_take_on_field?(dcolumn, drow)
       can_move_to_field?(dcolumn, drow)
-    end
-
-    def fields_between(dcolumn, drow)
-      return [] unless can_move_to_field?(dcolumn, drow)
-      if same_row?(drow)
-        smaller, bigger = [column, dcolumn].sort
-        (smaller+1..bigger-1).map{|c| [c, row] }
-      elsif same_column?(dcolumn)
-        smaller, bigger = [row, drow].sort
-        (smaller+1..bigger-1).map{|r| [column, r] }
-      elsif same_diagonal?(dcolumn, drow)
-        fields = []
-        if dcolumn > column
-          if drow > row
-            (dcolumn - column - 1).times do |i|
-              fields << [dcolumn-(i+1), drow-(i+1)]
-            end
-          else
-            (dcolumn - column - 1).times do |i|
-              fields << [dcolumn-(i+1), drow+(i+1)]
-            end
-          end
-        else
-          if drow > row
-            (column - dcolumn - 1).times do |i|
-              fields << [dcolumn+(i+1), drow-(i+1)]
-            end
-          else
-            (column - dcolumn - 1).times do |i|
-              fields << [dcolumn+(i+1), drow+(i+1)]
-            end
-          end
-        end
-        fields
-      else
-        []
-      end
-    end
-
-    def can_en_passant?(board, color, dcolumn, drow)
-      false
     end
 
     def can_be_promoted?

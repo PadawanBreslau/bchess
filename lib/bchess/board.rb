@@ -27,6 +27,7 @@ module Bchess
     def move(piece, column, row, promoted_piece = nil)
       return false if invalid_data?(piece, column, row)
       @en_passant = '-' unless en_passant_detected?(piece, column, row)
+
       if castle_detected?(piece, column)
         castle(piece, column, row)
       elsif promotion_detected?(piece, row)
@@ -50,7 +51,7 @@ module Bchess
     end
 
     def get_possible_pieces(info)
-      @pieces.select{|p| p.can_move?(info, self)}
+      @pieces.select{|p| p.can_make_move?(info, self)}
     end
 
     def update_info(piece, column, row)
@@ -60,7 +61,6 @@ module Bchess
       change_move_number if piece.color == Bchess::BLACK
       remove_old_piece(column, row, piece.color) if !!at(column, row)
     end
-
 
     def execute_promotion(piece, column, row, promoted_piece)
       raise RuntimeError.new("Promotion Not Specified") if promoted_piece.nil? || !(promoted_piece < Bchess::Piece)
@@ -99,36 +99,20 @@ module Bchess
       @pieces.select{ |p| p.class == Bchess::King && p.color == color }.first
     end
 
-    private
-
-    def set_pieces(board)
-      pieces.clear
-      board.split("/").each_with_index do |line, index|
-        column = 0
-        line.each_char do |char|
-          if char.to_i != 0
-            column += char.to_i - 1
-          else
-            pieces << fen_hash[char.to_sym][:klass].new(fen_hash[char.to_sym][:color], column, 7-index)
-          end
-          column += 1
-        end
-      end
+    def change_to_move
+      @to_move = to_move == Bchess::WHITE ? Bchess::BLACK : Bchess::WHITE
     end
+
+    private
 
     def remove_old_piece(column, row, color)
       taken_piece = _other_pieces(color).select{|p| p.row == row && p.column == column}.first
       pieces.delete(taken_piece)
     end
 
-    def change_to_move
-      @to_move = to_move == Bchess::WHITE ? Bchess::BLACK : Bchess::WHITE
-    end
-
     def just_moved
       to_move == Bchess::WHITE ? Bchess::BLACK : Bchess::WHITE
     end
-
 
     def king_attacked(color)
       _king = king(color)

@@ -50,6 +50,21 @@ module Bchess
       line
     end
 
+    def set_pieces(board)
+      pieces.clear
+      board.split("/").each_with_index do |line, index|
+        column = 0
+        line.each_char do |char|
+          if char.to_i != 0
+            column += char.to_i - 1
+          else
+            pieces << fen_hash[char.to_sym][:klass].new(fen_hash[char.to_sym][:color], column, 7-index)
+          end
+          column += 1
+        end
+      end
+    end
+
     def fen_allows?(piece, column)
       if piece.color == Bchess::WHITE
         if column == 6

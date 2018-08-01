@@ -27,7 +27,6 @@ module Bchess
           end
 
           #MAKE MOVE ON BOARD
-          #require 'pry'; binding.pry unless board.move(*move_info.values)
           board.move(*move_info.values)
           @moves << move_info
         end
@@ -37,7 +36,6 @@ module Bchess
         move_text = move.text_value
         info = return_move_information(move_text)
 
-  #      require 'pry'; binding.pry if board.get_possible_pieces(info).size != 1
         piece = get_moving_piece(board, info)
         {
           piece: piece,
@@ -52,7 +50,6 @@ module Bchess
       def get_moving_piece(board, info)
         pieces = board.get_possible_pieces(info)
 
-        # require 'pry'; binding.pry unless pieces.size == 1
         raise Bchess::InvalidMoveException.new("Too many or too few pieces to make move: #{info} : #{pieces.size}") unless pieces.size == 1
         pieces.first
       end
