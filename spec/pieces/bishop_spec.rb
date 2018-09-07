@@ -27,6 +27,18 @@ RSpec.describe Bchess::Bishop do
       expect(bishop.can_move_to_field?(0,0)).to be
     end
 
+    it 'should move - 2' do
+      bishop = Bchess::Bishop.new(Bchess::WHITE, 4,4)
+      expect(bishop.can_move_to_field?(3,3)).to be
+      expect(bishop.can_move_to_field?(3,5)).to be
+      expect(bishop.can_move_to_field?(5,3)).to be
+      expect(bishop.can_move_to_field?(5,5)).to be
+      expect(bishop.can_move_to_field?(2,2)).to be
+      expect(bishop.can_move_to_field?(6,6)).to be
+      expect(bishop.can_move_to_field?(2,6)).to be
+      expect(bishop.can_move_to_field?(6,2)).to be
+    end
+
     it 'shouldnt move' do
       bishop = Bchess::Bishop.new(Bchess::WHITE,1 ,1)
       expect(bishop.can_move_to_field?(1,1)).to be_falsey
