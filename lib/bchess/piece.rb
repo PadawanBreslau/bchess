@@ -64,12 +64,12 @@ module Bchess
       can_move_to_field?(column, row)
     end
 
-    def can_take?(column, row, board)
-      can_take_on_field?(column, row) && !!board.at(column, row)
+    def can_take?(column, row, board, en_passant = false)
+      can_take_on_field?(column, row) && (!!board.at(column, row) || en_passant)
     end
 
     def can_en_passant?(column, row, board)
-      board.en_passant == field(column, row)
+      board.en_passant == field(column, row) && can_take?(column, row, board, true)
     end
 
     def valid_position_after?(dcolumn, drow, board)
