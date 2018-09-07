@@ -4,7 +4,7 @@ module Validations
       read_fen
       false
     else
-      @fen = update_fen
+      @fen = write_fen
       true
     end
   end

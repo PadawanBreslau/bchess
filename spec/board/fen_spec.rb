@@ -21,7 +21,7 @@ RSpec.describe Bchess::Board do
       old_fen = board.fen
       expect(board.move(board.at(1,1), 4 , 4)).not_to be
       expect(board.fen).to eq Bchess::START_FEN
-      expect(board.update_fen).to eq old_fen
+      expect(board.write_fen).to eq old_fen
     end
 
     it 'should change fen after valid move' do

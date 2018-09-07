@@ -73,21 +73,14 @@ module Bchess
     end
 
     def valid_position_after?(dcolumn, drow, board)
-      old_col = column
-      old_row = row
+      fen = board.write_fen
 
-      move(dcolumn, drow)
-      board.change_to_move
+      helper_board = Bchess::Board.new(fen)
+      helper_board.read_fen
+      helper_piece = helper_board.at(column, row)
+      helper_board.move(helper_piece, column, row)
 
-      if board.valid_position?
-        board.change_to_move
-        move(old_col, old_row)
-        true
-      else
-        board.change_to_move
-        move(old_col, old_row)
-        false
-      end
+      helper_board.valid_position?
     end
 
     def additional_info?(info)

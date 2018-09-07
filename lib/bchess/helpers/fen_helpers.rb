@@ -17,7 +17,7 @@ module Bchess
       }
     end
 
-    def update_fen
+    def write_fen
       result = ''
       7.downto(0) do |i|
         line_pieces = pieces.select{ |p| p.row == i }

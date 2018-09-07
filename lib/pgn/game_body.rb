@@ -52,6 +52,10 @@ module Bchess
 
         raise Bchess::InvalidMoveException.new("Too many or too few pieces to make move: #{info} : #{pieces.size}") unless pieces.size == 1
         pieces.first
+      rescue Bchess::InvalidMoveException => e
+        board.print
+        require 'pry'; binding.pry
+        fail e
       end
 
       def extract_castle(move)
