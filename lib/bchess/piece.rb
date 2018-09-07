@@ -78,9 +78,7 @@ module Bchess
       helper_board = Bchess::Board.new(fen)
       helper_board.read_fen
       helper_piece = helper_board.at(column, row)
-      helper_board.move(helper_piece, column, row)
-
-      helper_board.valid_position?
+      helper_board.move(helper_piece, dcolumn, drow, Bchess::Queen) # TODO
     end
 
     def additional_info?(info)
