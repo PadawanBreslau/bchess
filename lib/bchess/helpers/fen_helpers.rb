@@ -99,6 +99,7 @@ module Bchess
       elsif piece == Bchess::Rook
         update_castles_after_rook_move(piece)
       end
+      @castles = '-' if @castles == ''
     end
 
     def update_castles_after_king_move(color)
