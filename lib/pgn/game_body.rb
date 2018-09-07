@@ -17,7 +17,7 @@ module Bchess
         @board.read_fen
         @moves = []
 
-        body.elements.each do |move|
+        body.elements&.each do |move|
           if is_castle?(move)
             move_info = extract_castle(move)
           elsif is_move?(move)

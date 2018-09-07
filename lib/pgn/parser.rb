@@ -29,6 +29,9 @@ module Bchess
 
         clean_tree(tree)
         read_games(tree)
+      rescue ArgumentError
+        p "Parse error at offset: #{@@parser.index}"
+        fail
       end
 
       private

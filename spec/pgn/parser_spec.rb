@@ -55,8 +55,20 @@ RSpec.describe Bchess::PGN::Parser do
       parsed_games.each do |parsed_game|
         game = Bchess::PGN::Game.new(parsed_game)
 
-        p game.header.player_white
-        p game.header.player_black
+        game.convert_body_to_moves
+        expect(game.moves).not_to be_empty
+      end
+    end
+
+    it 'should parse a file with multiple game of Kasparvo' do
+      file = Bchess::PGN::PGNFile.new('./spec/pgn/examples/Kasparov.pgn')
+      parser = Bchess::PGN::Parser.new(file)
+      parsed_games = parser.parse
+
+      #expect(parsed_games.size).to eq 2110
+
+      parsed_games.each do |parsed_game|
+        game = Bchess::PGN::Game.new(parsed_game)
 
         game.convert_body_to_moves
         expect(game.moves).not_to be_empty
