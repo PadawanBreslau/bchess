@@ -5,6 +5,7 @@ require_relative 'pgn_nodes.rb'
 module Bchess
   module PGN
     class ParserException < Exception ;end
+
     class Parser
       Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'pgn_rules.treetop')))
       @@parser = SexpParser.new
@@ -23,31 +24,26 @@ module Bchess
         end
 
         if !tree
-          puts @@parser.failure_reason
           raise PGN::ParserException, "Parse error at offset: #{@@parser.index}"
         end
 
-        clean_tree(tree)
         read_games(tree)
-      rescue ArgumentError
-        p "Parse error at offset: #{@@parser.index}"
-        fail
+        clean_tree(tree)
       end
 
       private
 
-      ## cleans tree, leaving only nodes from our classess
       def clean_tree(root_node)
         root_elements = root_node.elements
         return unless root_elements
-        root_elements.delete_if{|node| node.class.name == "Treetop::Runtime::SyntaxNode" }
-        root_elements.each {|node| clean_tree(node) }
+        root_elements.delete_if{ |node| node.class.name == "Treetop::Runtime::SyntaxNode" }
+        root_elements.each{ |node| clean_tree(node) }
       end
 
       def read_games(root_node)
         root_elements = root_node.elements
         return unless root_elements
-        root_elements.each{|game| parse_one_game(game) }
+        root_elements.each{ |game| parse_one_game(game) }
       end
 
 
@@ -78,13 +74,6 @@ module Bchess
         root_elements.each do |body_element|
           if body_element.class == Sexp::PMove
             Sexp::PMove.save_move(body_element, body_id)
-          elsif body_element.class == Sexp::PComment
-            #Sexp::PComment.save_comment(body_element, body_id, last_read_move)
-          elsif body_element.class == Sexp::PVariation
-            #depth = 1;
-            #Sexp::PMove.save_variation(body_element, body_id, depth)
-          elsif body_element.class == Sexp::PCastle
-            #last_read_move = Sexp::PMove.save_move(body_element, body_id)
           end
         end
       end

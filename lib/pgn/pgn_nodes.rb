@@ -10,7 +10,7 @@ module Sexp
 
   class PHeader < Treetop::Runtime::SyntaxNode
     def selfparse(value)
-      val = value.split(" ",2)
+      val = value.split(" ", 2)
       return [val[0].delete('['), val[1].delete('"]').rstrip]
     end
   end

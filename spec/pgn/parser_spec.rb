@@ -45,7 +45,7 @@ RSpec.describe Bchess::PGN::Parser do
       expect(game.moves).not_to be_empty
     end
 
-    it 'should parse a file with multiple game' do
+    it 'should parse a file with multiple game', slow: true do
       file = Bchess::PGN::PGNFile.new('./spec/pgn/examples/StanislawZawadzki.pgn')
       parser = Bchess::PGN::Parser.new(file)
       parsed_games = parser.parse
@@ -60,7 +60,7 @@ RSpec.describe Bchess::PGN::Parser do
       end
     end
 
-    it 'should parse a file with multiple game of Kasparvo' do
+    it 'should parse a file with multiple game of Kasparov', slow: true do
       file = Bchess::PGN::PGNFile.new('./spec/pgn/examples/Kasparov.pgn')
       parser = Bchess::PGN::Parser.new(file)
       parsed_games = parser.parse

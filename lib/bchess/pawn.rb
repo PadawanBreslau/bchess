@@ -28,7 +28,11 @@ module Bchess
     def pawn_move(dcolumn, drow)
       row_diff?(dcolumn, drow) &&
         direction_kept?(dcolumn, drow) &&
-        column == dcolumn
+        column_kept?(dcolumn, column)
+    end
+
+    def column_kept?(dcolumn, column)
+      column == dcolumn
     end
 
     def direction_kept?(dcolumn, drow)

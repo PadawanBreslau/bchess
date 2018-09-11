@@ -1,21 +1,26 @@
 require_relative '../bchess/helpers/board_helpers'
 
 module Bchess
-
   module PGN
     class GameBody
       attr_reader :body, :moves, :board
 
       include BoardHelpers
 
+      C_COLUMN = 2
+      G_COLUMN = 6
+
+      WHITE_ROW = 0
+      BLACK_ROW = 7
+
       def initialize(body)
         @body = body
+        @board = Bchess::Board.new
+        @moves = []
       end
 
       def extract_moves
-        @board = Bchess::Board.new
         @board.read_fen
-        @moves = []
 
         body.elements&.each do |move|
           if is_castle?(move)
@@ -26,7 +31,6 @@ module Bchess
             next
           end
 
-          #MAKE MOVE ON BOARD
           board.move(*move_info.values)
           @moves << move_info
         end
@@ -50,24 +54,23 @@ module Bchess
       def get_moving_piece(board, info)
         pieces = board.get_possible_pieces(info)
 
-        raise Bchess::InvalidMoveException.new("Too many or too few pieces to make move: #{info} : #{pieces.size}") unless pieces.size == 1
+        if pieces.size != 1
+          raise Bchess::InvalidMoveException.new("Too many or too few pieces to make move: #{info} : #{pieces.size}")
+        end
+
         pieces.first
-      rescue Bchess::InvalidMoveException => e
-        board.print
-        require 'pry'; binding.pry
-        fail e
       end
 
       def extract_castle(move)
         move_text = move.text_value
         info = return_move_information(move_text, true)
 
-        if 2 == move_text.split('-').size
-          column = 6
-          row = is_white?(info) ? 0 : 7
+        if C_COLUMN == move_text.split('-').size
+          column = G_COLUMN
+          row = is_white?(info) ? WHITE_ROW : BLACK_ROW
         else
-          column = 2
-          row = is_white?(info) ? 0 : 7
+          column = C_COLUMN
+          row = is_white?(info) ? WHITE_ROW : BLACK_ROW
         end
 
         {

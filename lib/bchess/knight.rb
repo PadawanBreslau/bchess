@@ -10,8 +10,7 @@ module Bchess
     end
 
     def can_move_to_field?(dcolumn, drow)
-      super &&
-        by_jump(dcolumn, drow)
+      super && by_jump(dcolumn, drow)
     end
 
     def fields_between(column, row)

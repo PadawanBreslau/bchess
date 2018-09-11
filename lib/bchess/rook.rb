@@ -1,5 +1,6 @@
 module Bchess
   class Rook < Piece
+    ROOK_REACH = 7
 
     attr_accessor :moved
 
@@ -18,8 +19,7 @@ module Bchess
     end
 
     def can_move_to_field?(dcolumn, drow)
-      super &&
-        by_line(dcolumn, drow, 7)
+      super && by_line(dcolumn, drow, ROOK_REACH)
     end
   end
 end

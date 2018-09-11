@@ -1,6 +1,8 @@
 module Bchess
   class King < Piece
 
+    KINGS_REACH = 1
+
     attr_reader :moved
 
     def initiialize(*args)
@@ -20,8 +22,8 @@ module Bchess
     def can_move_to_field?(dcolumn, drow)
       super &&
         (
-          by_line(dcolumn, drow, 1) ||
-          by_diagonal(dcolumn, drow, 1)
+          by_line(dcolumn, drow, KINGS_REACH) ||
+          by_diagonal(dcolumn, drow, KINGS_REACH)
       )
     end
   end
