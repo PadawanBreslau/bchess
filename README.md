@@ -1,6 +1,6 @@
 # Bchess
 
-Why bchess? Becasue BChess loves chess :)
+Why bchess? Becasue BChess love chess :)
 
 ## Installation
 
@@ -9,16 +9,42 @@ Standard instalation. Add this line to your application's Gemfile:
 ```ruby
 gem 'bchess'
 ```
-
 And then execute:
-
     $ bundle
 
 Or install it yourself as:
-
     $ gem install bchess
 
 ## Usage
+
+### Reading chess game from the file
+
+Parsing a game file
+```ruby
+file = Bchess::PGN::PGNFile.new('./games_to_read.pgn')
+parser = Bchess::PGN::Parser.new(file)
+parsed_games = parser.parse
+```
+
+If the file is invalid you will get an error. Otherwise you'll receive an array of games containing games headers and moves in proper order.
+
+Validating game on the board
+
+```ruby
+parsed_game = parser.parse.first
+Bchess::PGN::Game.new(parsed_game)
+
+## Getting moves
+game.convert_body_to_moves
+
+## Accessing headers
+game.header.player_white
+
+```
+
+### Testing
+Due to the nature of the gem I tested it on a large amount of games to make sure it covers all or almost all edgecases. Full tests take a lot of time, so you can run a basic test with test.sh script. If you want to run the full suite the run full_test.sh or just rspec spec. 
+
 
 ## Development
 
