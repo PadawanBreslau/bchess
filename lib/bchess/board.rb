@@ -1,9 +1,3 @@
-require_relative 'helpers/board_helpers'
-require_relative 'helpers/castle_helpers'
-require_relative 'helpers/en_passant_helpers'
-require_relative 'helpers/fen_helpers'
-require_relative 'helpers/validations'
-
 module Bchess
   class Board
     include BoardHelpers

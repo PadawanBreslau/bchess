@@ -1,7 +1,3 @@
-require_relative 'helpers/board_helpers'
-require_relative 'helpers/field_between_helpers'
-require_relative 'helpers/validations'
-
 module Bchess
   class Piece
     attr_reader :color, :column, :row
