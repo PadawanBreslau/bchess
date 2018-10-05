@@ -1,5 +1,3 @@
-require_relative '../bchess/helpers/board_helpers'
-
 module Bchess
   module PGN
     class GameBody

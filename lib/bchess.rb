@@ -18,6 +18,7 @@ require "bchess/board"
 
 require "pgn/parser"
 require "pgn/pgn_file"
+require "pgn/pgn_nodes"
 require "pgn/game"
 require "pgn/game_header"
 require "pgn/game_body"
