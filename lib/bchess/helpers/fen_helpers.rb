@@ -2,25 +2,25 @@ module Bchess
   module FenHelpers
     def fen_hash
       {
-        'k': {klass: Bchess::King, color: Bchess::BLACK},
-        'q': {klass: Bchess::Queen, color: Bchess::BLACK},
-        'r': {klass: Bchess::Rook, color: Bchess::BLACK},
-        'b': {klass: Bchess::Bishop, color: Bchess::BLACK},
-        'n': {klass: Bchess::Knight, color: Bchess::BLACK},
-        'p': {klass: Bchess::Pawn, color: Bchess::BLACK},
-        'K': {klass: Bchess::King, color: Bchess::WHITE},
-        'Q': {klass: Bchess::Queen, color: Bchess::WHITE},
-        'R': {klass: Bchess::Rook, color: Bchess::WHITE},
-        'B': {klass: Bchess::Bishop, color: Bchess::WHITE},
-        'N': {klass: Bchess::Knight, color: Bchess::WHITE},
-        'P': {klass: Bchess::Pawn, color: Bchess::WHITE},
+        'k': { klass: Bchess::King, color: Bchess::BLACK },
+        'q': { klass: Bchess::Queen, color: Bchess::BLACK },
+        'r': { klass: Bchess::Rook, color: Bchess::BLACK },
+        'b': { klass: Bchess::Bishop, color: Bchess::BLACK },
+        'n': { klass: Bchess::Knight, color: Bchess::BLACK },
+        'p': { klass: Bchess::Pawn, color: Bchess::BLACK },
+        'K': { klass: Bchess::King, color: Bchess::WHITE },
+        'Q': { klass: Bchess::Queen, color: Bchess::WHITE },
+        'R': { klass: Bchess::Rook, color: Bchess::WHITE },
+        'B': { klass: Bchess::Bishop, color: Bchess::WHITE },
+        'N': { klass: Bchess::Knight, color: Bchess::WHITE },
+        'P': { klass: Bchess::Pawn, color: Bchess::WHITE }
       }
     end
 
     def write_fen
       result = ''
       7.downto(0) do |i|
-        line_pieces = pieces.select{ |p| p.row == i }
+        line_pieces = pieces.select { |p| p.row == i }
         one_line = create_fen_line(line_pieces)
         result << one_line
         result << '/' unless i == 0
@@ -33,7 +33,7 @@ module Bchess
       counter = 0
 
       0.upto(7) do |i|
-        piece = pieces.select{ |p| p.column == i }.first
+        piece = pieces.select { |p| p.column == i }.first
         if !!piece
           if counter > 0
             line.concat(counter.to_s)
@@ -52,13 +52,13 @@ module Bchess
 
     def set_pieces(board)
       pieces.clear
-      board.split("/").each_with_index do |line, index|
+      board.split('/').each_with_index do |line, index|
         column = 0
         line.each_char do |char|
           if char.to_i != 0
             column += char.to_i - 1
           else
-            pieces << fen_hash[char.to_sym][:klass].new(fen_hash[char.to_sym][:color], column, 7-index)
+            pieces << fen_hash[char.to_sym][:klass].new(fen_hash[char.to_sym][:color], column, 7 - index)
           end
           column += 1
         end
@@ -82,15 +82,15 @@ module Bchess
     end
 
     def to_fen(piece)
-      fen_hash.key({ :klass => piece.class, :color => piece.color }).to_s
+      fen_hash.key(klass: piece.class, color: piece.color).to_s
     end
 
     def change_halfmove_clock(piece)
-      if piece.kind_of?(Bchess::Pawn)
-        @halfmove_clock = 0
-      else
-        @halfmove_clock = halfmove_clock + 1
-      end
+      @halfmove_clock = if piece.is_a?(Bchess::Pawn)
+                          0
+                        else
+                          halfmove_clock + 1
+                        end
     end
 
     def update_castles_after_move(piece)
@@ -104,9 +104,9 @@ module Bchess
 
     def update_castles_after_king_move(color)
       if color == Bchess::WHITE
-        @castles.gsub!('K', '').gsub!('Q', '')
+        @castles.delete!('K').delete!('Q')
       else
-        @castles.gsub!('k', '').gsub!('q', '')
+        @castles.delete!('k').delete!('q')
       end
     end
 

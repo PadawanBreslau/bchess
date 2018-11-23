@@ -14,8 +14,8 @@ module Bchess
       super &&
         (
           by_line(dcolumn, drow, QUEEN_REACH) ||
-          by_diagonal(dcolumn, drow,  QUEEN_REACH)
-      )
+          by_diagonal(dcolumn, drow, QUEEN_REACH)
+        )
     end
   end
 end

@@ -8,43 +8,43 @@ module Bchess
       end
 
       def player_white
-        @player_white ||= values["White"]
+        @player_white ||= values['White']
       end
 
       def player_black
-        @player_black ||= values["Black"]
+        @player_black ||= values['Black']
       end
 
       def elo_white
-        @elo_white ||= values["WhiteElo"]
+        @elo_white ||= values['WhiteElo']
       end
 
       def elo_black
-        @elo_black ||= values["BlackElo"]
+        @elo_black ||= values['BlackElo']
       end
 
       def event
-        @event ||= values["Event"]
+        @event ||= values['Event']
       end
 
       def site
-        @site ||= values["Site"]
+        @site ||= values['Site']
       end
 
       def date
-        @date ||= values["Date"]
+        @date ||= values['Date']
       end
 
       def round
-        @round ||= values["Round"]
+        @round ||= values['Round']
       end
 
       def eco
-        @eco ||= values["Eco"]
+        @eco ||= values['Eco']
       end
 
       def result
-        @result ||= values["Result"]
+        @result ||= values['Result']
       end
 
       def values

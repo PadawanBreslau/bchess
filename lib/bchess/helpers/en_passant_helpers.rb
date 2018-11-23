@@ -1,6 +1,6 @@
 module EnPassantHelpers
-  def validate_en_passant(piece, column, row)
-    #TODO
+  def validate_en_passant(_piece, _column, _row)
+    # TODO
     true
   end
 
@@ -17,6 +17,6 @@ module EnPassantHelpers
   def long_pawn_move(piece, column, row)
     piece.move(column, row)
     direction = piece.color == Bchess::WHITE ? 1 : -1
-    @en_passant = field(column, (row + piece.row)/2 - direction)
+    @en_passant = field(column, (row + piece.row) / 2 - direction)
   end
 end

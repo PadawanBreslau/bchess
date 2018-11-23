@@ -20,6 +20,7 @@ module Bchess
 
     def move(piece, column, row, promoted_piece = nil)
       return false if invalid_data?(piece, column, row)
+
       @en_passant = '-' unless en_passant_detected?(piece, column, row)
 
       if castle_detected?(piece, column)
@@ -30,9 +31,9 @@ module Bchess
         validate_en_passant(piece, column, row) && execute_en_passant(piece, column, row)
       elsif pawn_long_move_detected?(piece, row)
         long_pawn_move(piece, column, row)
-      elsif piece.can_move_to_field?(column,row)
+      elsif piece.can_move_to_field?(column, row)
         piece.move(column, row)
-      elsif piece.can_take_on_field?(column,row)
+      elsif piece.can_take_on_field?(column, row)
         piece.move(column, row)
       else
         return false
@@ -45,7 +46,7 @@ module Bchess
     end
 
     def get_possible_pieces(info)
-      @pieces.select{|p| p.can_make_move?(info, self)}
+      @pieces.select { |p| p.can_make_move?(info, self) }
     end
 
     def update_info(piece, column, row)
@@ -57,7 +58,8 @@ module Bchess
     end
 
     def execute_promotion(piece, column, row, promoted_piece)
-      raise RuntimeError.new("Promotion Not Specified") if promoted_piece.nil? || !(promoted_piece < Bchess::Piece)
+      raise 'Promotion Not Specified' if promoted_piece.nil? || !(promoted_piece < Bchess::Piece)
+
       pieces.delete(piece)
       promoted = promoted_piece.new(piece.color, column, row)
       promoted.moved = true if promoted_piece == Bchess::Rook
@@ -69,11 +71,11 @@ module Bchess
     end
 
     def at(column, row)
-      pieces.select{|p| p.row == row && p.column == column}.first
+      pieces.select { |p| p.row == row && p.column == column }.first
     end
 
     def read_fen
-      fen_pieces, fen_colors, fen_castles, fen_en_passant, fen_halfmove_clock, fen_move_number = fen.strip.split(" ")
+      fen_pieces, fen_colors, fen_castles, fen_en_passant, fen_halfmove_clock, fen_move_number = fen.strip.split(' ')
       set_pieces(fen_pieces)
       set_to_move(fen_colors)
       set_castles(fen_castles)
@@ -84,13 +86,13 @@ module Bchess
 
     def print
       puts 'Pieces WHITE: '
-      puts _pieces(Bchess::WHITE).map{|p| p.to_s }.join(', ')
+      puts _pieces(Bchess::WHITE).map(&:to_s).join(', ')
       puts 'Pieces BLACK: '
-      puts _pieces(Bchess::BLACK).map{|p| p.to_s }.join(', ')
+      puts _pieces(Bchess::BLACK).map(&:to_s).join(', ')
     end
 
     def king(color)
-      @pieces.select{ |p| p.class == Bchess::King && p.color == color }.first
+      @pieces.select { |p| p.class == Bchess::King && p.color == color }.first
     end
 
     def change_to_move
@@ -100,7 +102,7 @@ module Bchess
     private
 
     def remove_old_piece(column, row, color)
-      taken_piece = _other_pieces(color).select{|p| p.row == row && p.column == column}.first
+      taken_piece = _other_pieces(color).select { |p| p.row == row && p.column == column }.first
       pieces.delete(taken_piece)
     end
 
@@ -112,20 +114,20 @@ module Bchess
       _king = king(color)
       _pieces = _other_pieces(color)
 
-      _pieces.any?{|p| attacks?(p, _king)}
+      _pieces.any? { |p| attacks?(p, _king) }
     end
 
     def attacks?(piece, king)
       piece.can_take_on_field?(king.column, king.row) &&
-        piece.fields_between(king.column, king.row).none?{|f| at(*f)}
+        piece.fields_between(king.column, king.row).none? { |f| at(*f) }
     end
 
     def _pieces(color)
-      @pieces.select{ |p| p.color == color }
+      @pieces.select { |p| p.color == color }
     end
 
     def _other_pieces(color)
-      @pieces.select{ |p| p.color != color }
+      @pieces.reject { |p| p.color == color }
     end
   end
 end

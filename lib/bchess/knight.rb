@@ -1,6 +1,5 @@
 module Bchess
   class Knight < Piece
-
     def initiialize(*args)
       super(args)
     end
@@ -13,7 +12,7 @@ module Bchess
       super && by_jump(dcolumn, drow)
     end
 
-    def fields_between(column, row)
+    def fields_between(_column, _row)
       []
     end
 

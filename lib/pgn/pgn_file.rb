@@ -8,7 +8,7 @@ module Bchess
       end
 
       def load_games
-        file = File.open(filepath, "rt")
+        file = File.open(filepath, 'rt')
         @content = file.read
       end
     end

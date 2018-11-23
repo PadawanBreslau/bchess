@@ -14,4 +14,3 @@ RSpec.describe Bchess::PGN::Game do
     end
   end
 end
-

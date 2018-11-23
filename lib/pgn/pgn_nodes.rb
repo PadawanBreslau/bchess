@@ -10,7 +10,7 @@ module Sexp
 
   class PHeader < Treetop::Runtime::SyntaxNode
     def parse(value)
-      val = value.split(" ", 2)
+      val = value.split(' ', 2)
 
       [val[0].delete('['), val[1].delete('"]').rstrip]
     end
@@ -72,11 +72,11 @@ class Treetop::Runtime::SyntaxNode
   def create_value_hash
     hash = {}
 
-    self.elements.each do |element|
+    elements.each do |element|
       key = element.elements.first.text_value
       value = element.elements.last.text_value
 
-      hash[key] = value.gsub('"','')
+      hash[key] = value.delete('"')
     end
 
     hash

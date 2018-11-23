@@ -2,7 +2,7 @@ module Bchess
   class Game
     attr_reader :fen, :board, :moves
 
-    def initialize(fen='')
+    def initialize(fen = '')
       @fen = fen
       @board = Board.new(fen)
       @moves = []

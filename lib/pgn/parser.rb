@@ -2,7 +2,7 @@ require 'treetop'
 
 module Bchess
   module PGN
-    class ParserException < Exception ;end
+    class ParserException < RuntimeError; end
 
     class Parser
       attr_reader :input, :output, :error, :tree
@@ -15,13 +15,13 @@ module Bchess
       end
 
       def parse
-        if input.kind_of?(String)
+        if input.is_a?(String)
           @tree = @@parser.parse(input)
-        elsif input.kind_of?(Bchess::PGN::PGNFile)
+        elsif input.is_a?(Bchess::PGN::PGNFile)
           @tree = @@parser.parse(input.load_games)
         end
 
-        if !tree
+        unless tree
           raise PGN::ParserException, "Parse error at offset: #{@@parser.index}"
         end
 
@@ -34,8 +34,8 @@ module Bchess
         root_elements = root_node.elements
         return unless root_elements
 
-        root_elements.delete_if{ |node| node.class.name == "Treetop::Runtime::SyntaxNode" }
-        root_elements.each{ |node| sanitize_tree(node) }
+        root_elements.delete_if { |node| node.class.name == 'Treetop::Runtime::SyntaxNode' }
+        root_elements.each { |node| sanitize_tree(node) }
       end
     end
   end

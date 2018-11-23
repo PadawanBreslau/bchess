@@ -4,7 +4,7 @@ RSpec.describe Bchess::Board do
   context 'en_passant' do
     it 'should do en-passant' do
       board = Bchess::Board.new
-      expect{ board.read_fen }.not_to raise_error
+      expect { board.read_fen }.not_to raise_error
       expect(board.valid_position?).to be
 
       piece = board.at(4, 1)
@@ -20,7 +20,7 @@ RSpec.describe Bchess::Board do
 
     it 'should do en-passant with black' do
       board = Bchess::Board.new
-      expect{ board.read_fen }.not_to raise_error
+      expect { board.read_fen }.not_to raise_error
       expect(board.valid_position?).to be
 
       piece = board.at(0, 1)

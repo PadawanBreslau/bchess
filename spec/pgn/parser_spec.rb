@@ -4,12 +4,12 @@ RSpec.describe Bchess::PGN::Parser do
   context 'passing string to parser' do
     it 'passing empty string to parser' do
       parser = Bchess::PGN::Parser.new('')
-      expect{parser.parse}.not_to raise_error
+      expect { parser.parse }.not_to raise_error
     end
 
     it 'passing random string' do
       parser = Bchess::PGN::Parser.new('adasdsadsads')
-      expect{parser.parse}.to raise_error(Bchess::PGN::ParserException)
+      expect { parser.parse }.to raise_error(Bchess::PGN::ParserException)
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe Bchess::PGN::Parser do
       parser = Bchess::PGN::Parser.new(file)
       parsed_games = parser.parse
 
-      #expect(parsed_games.size).to eq 2110
+      # expect(parsed_games.size).to eq 2110
 
       parsed_games.each do |parsed_game|
         game = Bchess::PGN::Game.new(parsed_game)

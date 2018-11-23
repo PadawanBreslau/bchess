@@ -1,6 +1,5 @@
 module Bchess
   class King < Piece
-
     KINGS_REACH = 1
 
     attr_reader :moved
@@ -24,7 +23,7 @@ module Bchess
         (
           by_line(dcolumn, drow, KINGS_REACH) ||
           by_diagonal(dcolumn, drow, KINGS_REACH)
-      )
+        )
     end
   end
 end

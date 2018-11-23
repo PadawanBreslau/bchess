@@ -1,6 +1,5 @@
 module Bchess
   class Pawn < Piece
-
     def initiialize(*args)
       super(args)
     end
@@ -35,11 +34,11 @@ module Bchess
       column == dcolumn
     end
 
-    def direction_kept?(dcolumn, drow)
+    def direction_kept?(_dcolumn, drow)
       white? ? drow > row : row > drow
     end
 
-    def row_diff?(dcolumn, drow)
+    def row_diff?(_dcolumn, drow)
       (row - drow).abs <= (starting_position? ? 2 : 1)
     end
 
@@ -48,7 +47,7 @@ module Bchess
     end
 
     def pawn_position?
-      (1..6).include?(row)
+      (1..6).cover?(row)
     end
   end
 end

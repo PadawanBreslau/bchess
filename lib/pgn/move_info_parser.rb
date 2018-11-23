@@ -3,11 +3,11 @@ module Bchess
     class MoveInfoParser
       attr_accessor :info, :move, :castle, :move_string
 
-      CHECK = "+"
-      TAKE = "x"
-      TAKE_2 = ":"
-      MATE = "#"
-      PROMOTION = "="
+      CHECK = '+'.freeze
+      TAKE = 'x'.freeze
+      TAKE_2 = ':'.freeze
+      MATE = '#'.freeze
+      PROMOTION = '='.freeze
 
       def initialize(move, castle)
         @move = move
@@ -38,7 +38,7 @@ module Bchess
       end
 
       def extract_piece_type(move_string)
-        if 2 == move_string.size || move_string.size && pawn_taking?(move_string)
+        if move_string.size == 2 || move_string.size && pawn_taking?(move_string)
           Bchess::Pawn
         else
           get_piece_from_letter(move_string[0])
@@ -58,9 +58,9 @@ module Bchess
       end
 
       def extract_additional_info(move_string)
-        if (3 == move_string.size) && pawn_taking?(move_string)
+        if (move_string.size == 3) && pawn_taking?(move_string)
           move_string[0]
-        elsif (4 == move_string.size)
+        elsif move_string.size == 4
           move_string[1]
         end
       end
@@ -79,26 +79,26 @@ module Bchess
       def basic_move_data(move_split)
         @move_string = move_split.last.strip
 
-        raise InvalidMoveException.new("Wrong move description") if move_string.size < 2
+        raise InvalidMoveException, 'Wrong move description' if move_string.size < 2
+
         color = move_split.size == 2 ? Bchess::WHITE : Bchess::BLACK
         number = move_split.first.strip if move_split.size == 2
         {
           piece_color: color,
-          move_number:  number,
-          check:  move_string.include?(CHECK),
+          move_number: number,
+          check: move_string.include?(CHECK),
           take: move_string.include?(TAKE) || move_string.include?(TAKE_2),
-          mate: move_string.include?(MATE),
+          mate: move_string.include?(MATE)
         }
       end
 
-
       def get_piece_from_letter(letter)
         {
-          "K" => Bchess::King,
-          "Q" => Bchess::Queen,
-          "R" => Bchess::Rook,
-          "B" => Bchess::Bishop,
-          "N" => Bchess::Knight
+          'K' => Bchess::King,
+          'Q' => Bchess::Queen,
+          'R' => Bchess::Rook,
+          'B' => Bchess::Bishop,
+          'N' => Bchess::Knight
         }[letter]
       end
     end

@@ -7,13 +7,13 @@ RSpec.describe Bchess::Board do
       board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
-      king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
+      king_b = Bchess::King.new(Bchess::BLACK, 5, 5)
       board.pieces << king_b
 
       expect(board.valid_position?).to be
-      expect(board.move(king_w, 2 , 2)).to be
-      expect(board.move(king_b, 4 , 4)).to be
-      expect(board.move(king_w, 3 , 3)).not_to be
+      expect(board.move(king_w, 2, 2)).to be
+      expect(board.move(king_b, 4, 4)).to be
+      expect(board.move(king_w, 3, 3)).not_to be
     end
 
     it 'should move a queen' do
@@ -21,13 +21,13 @@ RSpec.describe Bchess::Board do
       board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
-      king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
+      king_b = Bchess::King.new(Bchess::BLACK, 5, 5)
       board.pieces << king_b
-      queen = Bchess::Queen.new(Bchess::BLACK, 7 ,7)
+      queen = Bchess::Queen.new(Bchess::BLACK, 7, 7)
       board.pieces << queen
 
       expect(board.valid_position?).to be
-      expect(board.move(king_w, 2 , 2)).to be
+      expect(board.move(king_w, 2, 2)).to be
       expect(board.move(queen, 7, 3)).to be
       expect(board.move(king_w, 3, 3)).not_to be
     end
@@ -37,13 +37,13 @@ RSpec.describe Bchess::Board do
       board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
-      king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
+      king_b = Bchess::King.new(Bchess::BLACK, 5, 5)
       board.pieces << king_b
-      rook = Bchess::Rook.new(Bchess::BLACK, 7 ,7)
+      rook = Bchess::Rook.new(Bchess::BLACK, 7, 7)
       board.pieces << rook
 
       expect(board.valid_position?).to be
-      expect(board.move(king_w, 2 , 2)).to be
+      expect(board.move(king_w, 2, 2)).to be
       expect(board.move(rook, 7, 3)).to be
       expect(board.move(king_w, 3, 3)).not_to be
     end
@@ -53,13 +53,13 @@ RSpec.describe Bchess::Board do
       board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
-      king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
+      king_b = Bchess::King.new(Bchess::BLACK, 5, 5)
       board.pieces << king_b
-      bishop = Bchess::Bishop.new(Bchess::BLACK, 7 ,6)
+      bishop = Bchess::Bishop.new(Bchess::BLACK, 7, 6)
       board.pieces << bishop
 
       expect(board.valid_position?).to be
-      expect(board.move(king_w, 2 , 2)).to be
+      expect(board.move(king_w, 2, 2)).to be
       expect(board.move(bishop, 4, 3)).to be
       expect(board.move(king_w, 3, 3)).to be
     end
@@ -69,9 +69,9 @@ RSpec.describe Bchess::Board do
       board.to_move = Bchess::WHITE
       king_w = Bchess::King.new(Bchess::WHITE, 1, 1)
       board.pieces << king_w
-      king_b = Bchess::King.new(Bchess::BLACK, 5 ,5)
+      king_b = Bchess::King.new(Bchess::BLACK, 5, 5)
       board.pieces << king_b
-      queen = Bchess::Queen.new(Bchess::BLACK, 7 , 3)
+      queen = Bchess::Queen.new(Bchess::BLACK, 7, 3)
       board.pieces << queen
 
       expect(board.valid_position?).to be
