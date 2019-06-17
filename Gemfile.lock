@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bchess (0.1.1)
+    bchess (0.1.2)
 
 GEM
   remote: https://rubygems.org/
@@ -42,4 +42,4 @@ DEPENDENCIES
   treetop (~> 1.6)
 
 BUNDLED WITH
-   1.16.1
+   1.17.2
