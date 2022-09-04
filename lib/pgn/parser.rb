@@ -7,22 +7,22 @@ module Bchess
     class Parser
       attr_reader :input, :output, :error, :tree
 
-      Treetop.load('./lib/pgn/pgn_rules.treetop')
-      @@parser = SexpParser.new
+      Treetop.load(File.expand_path('pgn_rules.treetop', __dir__))
 
       def initialize(input)
+        @parser = SexpParser.new
         @input = input
       end
 
       def parse
         if input.is_a?(String)
-          @tree = @@parser.parse(input)
+          @tree = @parser.parse(input)
         elsif input.is_a?(Bchess::PGN::PGNFile)
-          @tree = @@parser.parse(input.load_games)
+          @tree = @parser.parse(input.load_games)
         end
 
         unless tree
-          raise PGN::ParserException, "Parse error at offset: #{@@parser.index}"
+          raise PGN::ParserException, "Parse error: #{@parser.failure_reason}"
         end
 
         sanitize_tree(tree)

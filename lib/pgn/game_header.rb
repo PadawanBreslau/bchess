@@ -1,7 +1,7 @@
 module Bchess
   module PGN
     class GameHeader
-      attr_reader :header, :player_white, :player_black
+      attr_reader :header
 
       def initialize(header)
         @header = header
@@ -40,11 +40,23 @@ module Bchess
       end
 
       def eco
-        @eco ||= values['Eco']
+        @eco ||= values['ECO']
       end
 
       def result
         @result ||= values['Result']
+      end
+
+      def opening
+        @opening ||= values['Opening']
+      end
+
+      def variation
+        @variation ||= values['Variation']
+      end
+
+      def plycount
+        @plycount ||= values['PlyCount']
       end
 
       def values

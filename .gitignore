@@ -9,4 +9,6 @@
 
 # rspec failure tracking
 .rspec_status
-/.idea
+
+JetBrains iDeA config files
+/.idea/

@@ -1,9 +1,5 @@
 module Bchess
   module BoardHelpers
-    def field(column, row)
-      (column + 97).chr + (row + 1).to_s
-    end
-
     def invalid_data?(piece, column, row)
       piece.nil? || !(0..7).cover?(column) || !(0..7).cover?(row)
     end
