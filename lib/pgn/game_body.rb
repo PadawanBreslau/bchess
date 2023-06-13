@@ -29,8 +29,10 @@ module Bchess
             next
           end
 
+          piece = move_info.fetch(:piece)
+          column, row = piece.column, piece.row
           board.move(*move_info.values)
-          @moves << move_info
+          @moves << move_info.merge( { piece: piece.class.new(piece.color, column, row) })
         end
       end
 

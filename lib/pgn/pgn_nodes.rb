@@ -1,3 +1,5 @@
+require 'treetop'
+
 module Sexp
   class PAllGames < Treetop::Runtime::SyntaxNode
   end
